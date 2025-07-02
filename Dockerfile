@@ -1,6 +1,6 @@
 FROM golang:1.21.12-alpine3.20 AS builder
 RUN go env -w GO111MODULE=on
-WORKDIR /sca-integrator
+WORKDIR /secret-check-integrator
 COPY ./    ./
 RUN CGO_ENABLED=0 GOOS=linux go mod vendor
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
@@ -23,7 +23,7 @@ RUN chmod 755 /usr/local/bin/trivy
 # ADD https://github.com/golang/go/raw/master/lib/time/zoneinfo.zip /zoneinfo.zip
 # ENV ZONEINFO /zoneinfo.zip
 WORKDIR /root/
-COPY --from=builder /sca-integrator ./
+COPY --from=builder /secret-check-integrator ./
 #COPY --from=builder /sca-integrator/_public_key.pem ./
 RUN mkdir "_scanned-project-files"
 RUN mkdir "_project-repository"
